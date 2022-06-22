@@ -49,7 +49,7 @@ public class SalaryCalculatorController {
         if (id < jobCategories.getJobTitles().size() && id > 0) {
             DataSalaryCalculator data = setEntityField(grossMonthlySalary,jobCategories.getJobTitles().get(id-1));
             dataSalaryCalculatorRepository.save(data);
-            System.out.println(dataSalaryCalculatorRepository.findJobTitles());
+            System.out.println(dataSalaryCalculatorRepository.findJobTitles(jobCategories.getJobTitles().get(id-1)));
 
         }
 
@@ -86,19 +86,18 @@ public class SalaryCalculatorController {
 
 
 
-
-
     private DataSalaryCalculator setEntityField(BigDecimal grossMonthlySalary, String jobTitle) {
         return dataSalaryCalculator = DataSalaryCalculator.builder().
                 annualGross(salaryCalculatorService.get(0).apply(grossMonthlySalary))
                 .annualNet(salaryCalculatorService.get(1).apply(grossMonthlySalary))
-                .health(salaryCalculatorService.get(2).apply(grossMonthlySalary))
-                .netMonthly(salaryCalculatorService.get(3).apply(grossMonthlySalary))
-                .oldAgePensionInsurance(salaryCalculatorService.get(4).apply(grossMonthlySalary))
+                .disabilityZus(salaryCalculatorService.get(2).apply(grossMonthlySalary))
+                .health(salaryCalculatorService.get(3).apply(grossMonthlySalary))
+                .netMonthly(salaryCalculatorService.get(4).apply(grossMonthlySalary))
                 .pensionZus(salaryCalculatorService.get(5).apply(grossMonthlySalary))
                 .sicknessZus(salaryCalculatorService.get(6).apply(grossMonthlySalary))
                 .tax(salaryCalculatorService.get(7).apply(grossMonthlySalary))
                 .totalZus(salaryCalculatorService.get(8).apply(grossMonthlySalary))
+                .grossMonthly(grossMonthlySalary)
                 .jobTitle(jobTitle)
                 .build();
     }

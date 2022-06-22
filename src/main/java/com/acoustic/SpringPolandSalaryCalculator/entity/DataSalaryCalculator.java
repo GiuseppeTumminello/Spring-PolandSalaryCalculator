@@ -9,9 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.stereotype.Component;
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 
@@ -25,9 +22,9 @@ public class DataSalaryCalculator {
     @Column(columnDefinition = "serial")
     private int id;
     @Column(name = "pension_zus")
-    private BigDecimal oldAgePensionInsurance;
-    @Column(name = "disability_zus")
     private BigDecimal pensionZus;
+    @Column(name = "disability_zus")
+    private BigDecimal disabilityZus;
     @Column(name = "sickness_zus")
     private BigDecimal sicknessZus;
     @Column(name = "total_zus")
