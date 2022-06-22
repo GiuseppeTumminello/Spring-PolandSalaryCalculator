@@ -1,10 +1,10 @@
-package com.acoustic.SpringPolandSalaryCalculator.calculator;
+package com.acoustic.SpringPolandSalaryCalculator.calculatorservice;
 
 import java.math.BigDecimal;
 import java.util.function.UnaryOperator;
 
 import org.springframework.stereotype.Component;
-
+import org.springframework.stereotype.Service;
 
 @Component
 public interface SalaryCalculatorService extends UnaryOperator<BigDecimal>{
