@@ -45,11 +45,14 @@ public class SalaryCalculatorController {
 
 
     @PostMapping("/calculate/{grossMonthlySalary}")
-    public Map<String, BigDecimal> calculate(@PathVariable BigDecimal grossMonthlySalary, @RequestParam(defaultValue = "0") int id) {
+    public Map<String, BigDecimal> calculate(@PathVariable BigDecimal grossMonthlySalary, @RequestParam(defaultValue = "0") int ignoredDepartementId, @RequestParam(defaultValue = "0") int id) {
+
+
         if (id < jobCategories.getJobTitles().size() && id > 0) {
-            DataSalaryCalculator data = setEntityField(grossMonthlySalary,jobCategories.getJobTitles().get(id-1));
+            String [] j = jobCategories.getJobTitles().get(1).split(",");
+            DataSalaryCalculator data = buildDataSalaryCalculator(grossMonthlySalary,jobCategories.getJobTitles().get(id-1));
             dataSalaryCalculatorRepository.save(data);
-            System.out.println(dataSalaryCalculatorRepository.findJobTitles(jobCategories.getJobTitles().get(id-1)));
+            System.out.println(dataSalaryCalculatorRepository.findAverageByJobTitle(jobCategories.getJobTitles().get(id-1)));
 
         }
 
@@ -65,7 +68,7 @@ public class SalaryCalculatorController {
     public Map<String, BigDecimal> calculateNetSalary(@PathVariable BigDecimal grossMonthlySalary, @RequestParam(defaultValue = "0") int id) {
         if (id < jobCategories.getJobTitles().size() && id > 0) {
 
-            DataSalaryCalculator data = setEntityField(grossMonthlySalary,jobCategories.getJobTitles().get(id-1));
+            DataSalaryCalculator data = buildDataSalaryCalculator(grossMonthlySalary,jobCategories.getJobTitles().get(id-1));
             dataSalaryCalculatorRepository.save(data);
 
 
@@ -86,7 +89,7 @@ public class SalaryCalculatorController {
 
 
 
-    private DataSalaryCalculator setEntityField(BigDecimal grossMonthlySalary, String jobTitle) {
+    private DataSalaryCalculator buildDataSalaryCalculator(BigDecimal grossMonthlySalary, String jobTitle) {
         return dataSalaryCalculator = DataSalaryCalculator.builder().
                 annualGross(salaryCalculatorService.get(0).apply(grossMonthlySalary))
                 .annualNet(salaryCalculatorService.get(1).apply(grossMonthlySalary))

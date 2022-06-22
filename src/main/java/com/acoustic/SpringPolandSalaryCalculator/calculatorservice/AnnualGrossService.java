@@ -15,7 +15,6 @@ public class AnnualGrossService implements SalaryCalculatorService{
     private final RatesConfigurationProperties rate;
 
 
-
     @Override
     public String getDescription() {
         return "Annual gross:";
@@ -23,6 +22,6 @@ public class AnnualGrossService implements SalaryCalculatorService{
 
     @Override
     public BigDecimal apply(BigDecimal grossMonthlySalary) {
-        return grossMonthlySalary.multiply(rate.getMinimumSalary());
+        return grossMonthlySalary.multiply(rate.getMonthNumber());
     }
 }

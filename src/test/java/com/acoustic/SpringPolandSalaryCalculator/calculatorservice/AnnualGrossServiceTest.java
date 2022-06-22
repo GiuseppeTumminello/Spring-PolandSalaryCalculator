@@ -1,4 +1,4 @@
-package com.acoustic.SpringPolandSalaryCalculator;
+package com.acoustic.SpringPolandSalaryCalculator.calculatorservice;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
