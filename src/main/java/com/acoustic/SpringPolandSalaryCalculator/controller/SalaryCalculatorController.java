@@ -33,65 +33,46 @@ public class SalaryCalculatorController {
 
 
     @GetMapping("/getJobTitles")
-    public Map<Integer, String> getJobTitles(){
+    public Map<Integer, String> getJobTitles() {
         Integer count = 1;
         Map<Integer, String> jobTitleMap = new TreeMap<>();
-        for (var jobTitle: jobCategories.getJobTitles()){
+        for (var jobTitle : jobCategories.getJobTitles()) {
             jobTitleMap.put(count++, jobTitle);
         }
         return jobTitleMap;
     }
 
 
-
     @PostMapping("/calculate/{grossMonthlySalary}")
-    public Map<String, BigDecimal> calculate(@PathVariable BigDecimal grossMonthlySalary, @RequestParam(defaultValue = "0") int ignoredDepartementId, @RequestParam(defaultValue = "0") int id) {
-
-
-        if (id < jobCategories.getJobTitles().size() && id > 0) {
-            String [] j = jobCategories.getJobTitles().get(1).split(",");
-            DataSalaryCalculator data = buildDataSalaryCalculator(grossMonthlySalary,jobCategories.getJobTitles().get(id-1));
-            dataSalaryCalculatorRepository.save(data);
-            System.out.println(dataSalaryCalculatorRepository.findAverageByJobTitle(jobCategories.getJobTitles().get(id-1)));
-
+    public Map<String, BigDecimal> calculate(@PathVariable BigDecimal grossMonthlySalary, @RequestParam(defaultValue = "0") int departmentId, @RequestParam(defaultValue = "0")
+    int jobTitleId) {
+        if (departmentId < jobCategories.getJobTitles().size() && departmentId > 0) {
+            statistic(departmentId, jobTitleId, grossMonthlySalary);
         }
-
-        if (grossMonthlySalary.compareTo(rates.getMinimumSalary()) > 0) {
-            return salaryCalculatorService.stream()
-                    .collect(Collectors.toMap(SalaryCalculatorService::getDescription,
-                            e -> e.apply(grossMonthlySalary)));
-        } else {
-            throw new NotValidSalaryException("Not valid value");
-        }
+        return salaryCalculatorService.stream()
+                .collect(Collectors.toMap(SalaryCalculatorService::getDescription, e -> e.apply(grossMonthlySalary)));
     }
 
-    public Map<String, BigDecimal> calculateNetSalary(@PathVariable BigDecimal grossMonthlySalary, @RequestParam(defaultValue = "0") int id) {
-        if (id < jobCategories.getJobTitles().size() && id > 0) {
+    private void statistic(final int departmentId, final int jobTitleId, BigDecimal grossMonthlySalary) {
 
-            DataSalaryCalculator data = buildDataSalaryCalculator(grossMonthlySalary,jobCategories.getJobTitles().get(id-1));
+        List<String> jobTitles = List.of(jobCategories.getJobTitles().get(departmentId - 1).split(","));
+        if (jobTitleId > 0 && jobTitleId < jobTitles.size()) {
+
+            DataSalaryCalculator data = buildDataSalaryCalculator(grossMonthlySalary, jobTitles.get(jobTitleId-1));
             dataSalaryCalculatorRepository.save(data);
-
-
-
+            //TODO: I can return a map with with this format {
+            // average : 81215.00}
+            System.out.println(dataSalaryCalculatorRepository.findAverageByJobTitle(jobCategories.getJobTitles()
+                  .get(jobTitleId - 1)));
         }
 
-
-        if (grossMonthlySalary.compareTo(rates.getMinimumSalary()) > 0) {
-            return salaryCalculatorService.stream()
-                    .collect(Collectors.toMap(SalaryCalculatorService::getDescription,
-                            e -> e.apply(grossMonthlySalary)));
-        } else {
-            throw new NotValidSalaryException("Not valid value");
-
-        }
     }
-
 
 
 
     private DataSalaryCalculator buildDataSalaryCalculator(BigDecimal grossMonthlySalary, String jobTitle) {
-        return dataSalaryCalculator = DataSalaryCalculator.builder().
-                annualGross(salaryCalculatorService.get(0).apply(grossMonthlySalary))
+        return dataSalaryCalculator = DataSalaryCalculator.builder()
+                .annualGross(salaryCalculatorService.get(0).apply(grossMonthlySalary))
                 .annualNet(salaryCalculatorService.get(1).apply(grossMonthlySalary))
                 .disabilityZus(salaryCalculatorService.get(2).apply(grossMonthlySalary))
                 .health(salaryCalculatorService.get(3).apply(grossMonthlySalary))
