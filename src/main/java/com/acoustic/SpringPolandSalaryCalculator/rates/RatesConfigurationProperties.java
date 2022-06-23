@@ -21,7 +21,6 @@ import lombok.Setter;
 @Component
 public class RatesConfigurationProperties {
 
-
     private  BigDecimal pensionZusRate;
 
     private  BigDecimal disabilityZusRate;
@@ -37,6 +36,7 @@ public class RatesConfigurationProperties {
     private  BigDecimal taxRate32Rate;
 
     private  BigDecimal taxGrossAmountTrashold;
+
     private  BigDecimal monthNumber;
 
     private  BigDecimal minimumSalary;

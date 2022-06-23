@@ -3,7 +3,7 @@ package com.acoustic.SpringPolandSalaryCalculator.controller;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.acoustic.SpringPolandSalaryCalculator.calculatorservice.SalaryCalculatorService;
 import com.acoustic.SpringPolandSalaryCalculator.entity.DataSalaryCalculator;
 import com.acoustic.SpringPolandSalaryCalculator.jobcategories.JobCategories;
-import com.acoustic.SpringPolandSalaryCalculator.rates.RatesConfigurationProperties;
 import com.acoustic.SpringPolandSalaryCalculator.service.DataSalaryCalculatorRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -27,51 +26,44 @@ public class SalaryCalculatorController {
     private final DataSalaryCalculatorRepository dataSalaryCalculatorRepository;
     private final List<SalaryCalculatorService> salaryCalculatorService;
     private DataSalaryCalculator dataSalaryCalculator;
-    private final RatesConfigurationProperties rates;
     private final JobCategories jobCategories;
 
 
-    @GetMapping("/getJobTitles")
-    public Map<Integer, String> getJobTitles() {
-        int count = 1;
-        Map<Integer, String> jobTitleMap = new TreeMap<>();
-        for (var jobTitle : jobCategories.getJobTitles()) {
-            jobTitleMap.put(count++, jobTitle);
-        }
-        return jobTitleMap;
+    @GetMapping("/getJobTitles/{departmentName}")
+    public String[] getJobTitles(@PathVariable String departmentName) {
+       return jobCategories.getJobDepartmentAndTitles().get(departmentName).split(",");
     }
+
+     @GetMapping("/getJobDepartment")
+     public Set<String> getDepartmentName() {
+         return jobCategories.getJobDepartmentAndTitles().keySet();
+     }
 
 
     @PostMapping("/calculate/{grossMonthlySalary}")
-    public Map<String, BigDecimal> getSalaryCalculation(
-            @PathVariable
-            BigDecimal grossMonthlySalary,
-            @RequestParam(defaultValue = "0")
-            int departmentId,
-            @RequestParam(defaultValue = "0")
-            int jobTitleId) {
-        var response = salaryCalculatorService.stream()
-                .collect(Collectors.toMap(SalaryCalculatorService::getDescription, e -> e.apply(grossMonthlySalary)));
-        if (departmentId <= jobCategories.getJobTitles().size() && departmentId > 0) {
-            BigDecimal statistic1 = statistic(departmentId, jobTitleId, grossMonthlySalary);
-            if (statistic1 != null) {
-                response.put("Average", statistic1);
-            }
+    public Map<String, BigDecimal> getSalaryCalculation(@PathVariable BigDecimal grossMonthlySalary, @RequestParam(defaultValue = "0") String departmentName, @RequestParam(defaultValue = "0") int jobTitleId) {
+         var response = salaryCalculatorService.stream()
+                 .collect(Collectors.toMap(SalaryCalculatorService::getDescription, e -> e.apply(grossMonthlySalary)));
+         if (jobCategories.getJobDepartmentAndTitles().containsKey(departmentName.toLowerCase())) {
+             BigDecimal average = statistic(departmentName, jobTitleId, grossMonthlySalary);
+            if (average != null) {
+                 response.put("Average", average);
+             }
+         }
+         return response;
+     }
 
-        }
 
-        return response;
-    }
 
-    private BigDecimal statistic(int departmentId, int jobTitleId, BigDecimal grossMonthlySalary) {
 
-        List<String> jobTitlesList = List.of(jobCategories.getJobTitles().get(departmentId - 1).split(","));
+
+    private BigDecimal statistic(String departmentName, int jobTitleId, BigDecimal grossMonthlySalary) {
+        List<String > jobTitlesList = List.of(jobCategories.getJobDepartmentAndTitles().get(departmentName).split(","));
         if (jobTitleId <= jobTitlesList.size() && jobTitleId > 0) {
             dataSalaryCalculatorRepository.save(buildDataSalaryCalculator(grossMonthlySalary, jobTitlesList.get(jobTitleId - 1)));
             return dataSalaryCalculatorRepository.findAverageByJobTitle(jobTitlesList.get(jobTitleId - 1));
 
         } else {
-
             return null;
         }
 

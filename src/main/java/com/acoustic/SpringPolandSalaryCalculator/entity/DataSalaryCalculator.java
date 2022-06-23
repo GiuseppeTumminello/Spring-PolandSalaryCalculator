@@ -18,7 +18,6 @@ import lombok.Getter;
 @Getter
 @Table(name = "salary_calculator_spring")
 public class DataSalaryCalculator {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial")
@@ -45,7 +44,6 @@ public class DataSalaryCalculator {
     private BigDecimal grossMonthly;
     @Column(name = "job_title")
     private String jobTitle;
-
 
 }
 
