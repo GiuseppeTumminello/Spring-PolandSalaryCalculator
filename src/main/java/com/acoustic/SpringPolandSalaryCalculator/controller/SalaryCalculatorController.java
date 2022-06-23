@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.acoustic.SpringPolandSalaryCalculator.calculatorservice.SalaryCalculatorService;
 import com.acoustic.SpringPolandSalaryCalculator.entity.DataSalaryCalculator;
-import com.acoustic.SpringPolandSalaryCalculator.exception.NotValidSalaryException;
 import com.acoustic.SpringPolandSalaryCalculator.jobcategories.JobCategories;
 import com.acoustic.SpringPolandSalaryCalculator.rates.RatesConfigurationProperties;
 import com.acoustic.SpringPolandSalaryCalculator.service.DataSalaryCalculatorRepository;
@@ -34,7 +33,7 @@ public class SalaryCalculatorController {
 
     @GetMapping("/getJobTitles")
     public Map<Integer, String> getJobTitles() {
-        Integer count = 1;
+        int count = 1;
         Map<Integer, String> jobTitleMap = new TreeMap<>();
         for (var jobTitle : jobCategories.getJobTitles()) {
             jobTitleMap.put(count++, jobTitle);
@@ -44,30 +43,39 @@ public class SalaryCalculatorController {
 
 
     @PostMapping("/calculate/{grossMonthlySalary}")
-    public Map<String, BigDecimal> calculate(@PathVariable BigDecimal grossMonthlySalary, @RequestParam(defaultValue = "0") int departmentId, @RequestParam(defaultValue = "0")
-    int jobTitleId) {
-        if (departmentId < jobCategories.getJobTitles().size() && departmentId > 0) {
-            statistic(departmentId, jobTitleId, grossMonthlySalary);
-        }
-        return salaryCalculatorService.stream()
+    public Map<String, BigDecimal> getSalaryCalculation(
+            @PathVariable
+            BigDecimal grossMonthlySalary,
+            @RequestParam(defaultValue = "0")
+            int departmentId,
+            @RequestParam(defaultValue = "0")
+            int jobTitleId) {
+        var response = salaryCalculatorService.stream()
                 .collect(Collectors.toMap(SalaryCalculatorService::getDescription, e -> e.apply(grossMonthlySalary)));
+        if (departmentId <= jobCategories.getJobTitles().size() && departmentId > 0) {
+            BigDecimal statistic1 = statistic(departmentId, jobTitleId, grossMonthlySalary);
+            if (statistic1 != null) {
+                response.put("Average", statistic1);
+            }
+
+        }
+
+        return response;
     }
 
-    private void statistic(final int departmentId, final int jobTitleId, BigDecimal grossMonthlySalary) {
+    private BigDecimal statistic(int departmentId, int jobTitleId, BigDecimal grossMonthlySalary) {
 
-        List<String> jobTitles = List.of(jobCategories.getJobTitles().get(departmentId - 1).split(","));
-        if (jobTitleId > 0 && jobTitleId < jobTitles.size()) {
+        List<String> jobTitlesList = List.of(jobCategories.getJobTitles().get(departmentId - 1).split(","));
+        if (jobTitleId <= jobTitlesList.size() && jobTitleId > 0) {
+            dataSalaryCalculatorRepository.save(buildDataSalaryCalculator(grossMonthlySalary, jobTitlesList.get(jobTitleId - 1)));
+            return dataSalaryCalculatorRepository.findAverageByJobTitle(jobTitlesList.get(jobTitleId - 1));
 
-            DataSalaryCalculator data = buildDataSalaryCalculator(grossMonthlySalary, jobTitles.get(jobTitleId-1));
-            dataSalaryCalculatorRepository.save(data);
-            //TODO: I can return a map with with this format {
-            // average : 81215.00}
-            System.out.println(dataSalaryCalculatorRepository.findAverageByJobTitle(jobCategories.getJobTitles()
-                  .get(jobTitleId - 1)));
+        } else {
+
+            return null;
         }
 
     }
-
 
 
     private DataSalaryCalculator buildDataSalaryCalculator(BigDecimal grossMonthlySalary, String jobTitle) {

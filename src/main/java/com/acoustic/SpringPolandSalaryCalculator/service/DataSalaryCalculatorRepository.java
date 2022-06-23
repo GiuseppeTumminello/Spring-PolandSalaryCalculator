@@ -16,4 +16,6 @@ public interface DataSalaryCalculatorRepository extends JpaRepository<DataSalary
 
 
 
+
+
 }
