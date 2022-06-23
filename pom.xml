@@ -51,6 +51,13 @@
       <scope>test</scope>
     </dependency>
 
+    
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+
+
   </dependencies>
   <description>Poland salary calculator</description>
   <groupId>com.acoustic</groupId>
