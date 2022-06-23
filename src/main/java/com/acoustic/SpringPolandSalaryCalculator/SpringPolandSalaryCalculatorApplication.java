@@ -17,7 +17,6 @@ import com.acoustic.SpringPolandSalaryCalculator.rates.RatesConfigurationPropert
 public class SpringPolandSalaryCalculatorApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringPolandSalaryCalculatorApplication.class, args);
-        RatesConfigurationProperties ratesConfigurationProperties = new RatesConfigurationProperties();
 
     }
 }

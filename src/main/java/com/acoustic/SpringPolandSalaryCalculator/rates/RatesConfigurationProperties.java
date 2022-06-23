@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "rate")
-@PropertySource("rates.properties")
+@PropertySource("classpath:rates.properties")
 @Component
 public class RatesConfigurationProperties {
 

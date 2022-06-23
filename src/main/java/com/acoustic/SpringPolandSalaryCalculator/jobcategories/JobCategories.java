@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@PropertySource("job-categories.properties")
+
+@PropertySource("classpath:job-categories.properties")
 @ConfigurationProperties(prefix = "jobs")
 @Component
 public class JobCategories {

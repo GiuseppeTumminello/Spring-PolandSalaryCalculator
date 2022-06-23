@@ -50,6 +50,7 @@
       <groupId>org.springframework.boot</groupId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
   <description>Poland salary calculator</description>
   <groupId>com.acoustic</groupId>
