@@ -25,7 +25,6 @@ public class SalaryCalculatorController {
 
     private final DataSalaryCalculatorRepository dataSalaryCalculatorRepository;
     private final List<SalaryCalculatorService> salaryCalculatorService;
-    private DataSalaryCalculator dataSalaryCalculator;
     private final JobCategories jobCategories;
 
 
@@ -71,7 +70,7 @@ public class SalaryCalculatorController {
 
 
     private DataSalaryCalculator buildDataSalaryCalculator(BigDecimal grossMonthlySalary, String jobTitle) {
-        return this.dataSalaryCalculator = DataSalaryCalculator.builder()
+        return DataSalaryCalculator.builder()
                 .annualGross(this.salaryCalculatorService.get(0).apply(grossMonthlySalary))
                 .annualNet(this.salaryCalculatorService.get(1).apply(grossMonthlySalary))
                 .disabilityZus(this.salaryCalculatorService.get(2).apply(grossMonthlySalary))

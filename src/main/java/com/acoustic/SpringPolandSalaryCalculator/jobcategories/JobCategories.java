@@ -1,6 +1,5 @@
 package com.acoustic.SpringPolandSalaryCalculator.jobcategories;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -16,13 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@PropertySource("classpath:jobcategories.properties")
+@PropertySource("classpath:jobs.properties")
 @ConfigurationProperties(prefix = "jobs")
 @Configuration
 public class JobCategories {
 
 
      @Value("#{${jobs.jobTitles}}")
-     Map<String, String> jobDepartmentAndTitles = new HashMap<>();
+     private Map<String, String> jobDepartmentAndTitles;
 
 }
