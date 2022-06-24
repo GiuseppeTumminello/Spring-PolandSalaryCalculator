@@ -11,7 +11,7 @@ import com.acoustic.SpringPolandSalaryCalculator.entity.DataSalaryCalculator;
 
 public interface DataSalaryCalculatorRepository extends JpaRepository<DataSalaryCalculator, Integer> {
 
-    @Query(value = "select avg(gross_monthly) from salary_calculator_spring where job_title=:jobTitle", nativeQuery = true)
+    @Query(value = "select avg(gross_monthly) from data_salary_calculator where job_title=:jobTitle", nativeQuery = true)
     BigDecimal findAverageByJobTitle(@Param("jobTitle") String jobTitle);
 
 

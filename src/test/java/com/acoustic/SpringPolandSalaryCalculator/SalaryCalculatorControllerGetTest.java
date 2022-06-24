@@ -21,7 +21,6 @@ import com.acoustic.SpringPolandSalaryCalculator.jobcategories.JobCategories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-//@WebMvcTest(SalaryCalculatorController.class)
 @AutoConfigureMockMvc
 @SpringBootTest
 public class SalaryCalculatorControllerGetTest {
