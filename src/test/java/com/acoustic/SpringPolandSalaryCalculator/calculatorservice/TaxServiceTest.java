@@ -1,7 +1,6 @@
 package com.acoustic.SpringPolandSalaryCalculator.calculatorservice;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.in;
 import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
@@ -11,9 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.quality.Strictness;
 
 import com.acoustic.SpringPolandSalaryCalculator.rates.RatesConfigurationProperties;
 

@@ -12,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.acoustic.SpringPolandSalaryCalculator.calculatorservice.AnnualNetService;
-import com.acoustic.SpringPolandSalaryCalculator.calculatorservice.MonthlyNetService;
 import com.acoustic.SpringPolandSalaryCalculator.rates.RatesConfigurationProperties;
 
 

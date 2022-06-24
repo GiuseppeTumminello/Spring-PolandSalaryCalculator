@@ -25,12 +25,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 public class SalaryCalculatorControllerGetTest {
 
-    private final String DEPARTMENT_NAME_ENDPOINT = "/getJobDepartment";
-    private final String IT_JOB_TITLE_ENDPOINT = "/getJobTitles/it";
-    private final String FINANCE_JOB_TITLE_ENDPOINT = "/getJobTitles/finance";
-    private final String ENGINEER_JOB_TITLE_ENDPOINT = "/getJobTitles/engineer";
-    private final String RESTAURANT_JOB_TITLE_ENDPOINT = "/getJobTitles/restaurant";
-    private final String AIRLINE_JOB_TITLE_ENDPOINT = "/getJobTitles/airline";
+    public static final String AIRLINE = "airline";
+    public static final String RESTAURANT = "restaurant";
+    public static final String ENGINEER = "engineer";
+    public static final String FINANCE = "finance";
+    public static final String IT = "it";
+    private static final String DEPARTMENT_NAME_ENDPOINT = "/getJobDepartment";
+    private static final String IT_JOB_TITLE_ENDPOINT = "/getJobTitles/it";
+    private static final String FINANCE_JOB_TITLE_ENDPOINT = "/getJobTitles/finance";
+    private static final String ENGINEER_JOB_TITLE_ENDPOINT = "/getJobTitles/engineer";
+    private static final String RESTAURANT_JOB_TITLE_ENDPOINT = "/getJobTitles/restaurant";
+    private static final String AIRLINE_JOB_TITLE_ENDPOINT = "/getJobTitles/airline";
 
 
     @Autowired
@@ -44,14 +49,14 @@ public class SalaryCalculatorControllerGetTest {
 
     @Test
     public void getDepartmentName() throws Exception {
-        String expected = objectMapper.writeValueAsString(jobCategories.getJobDepartmentAndTitles()
+        String expected = this.objectMapper.writeValueAsString(this.jobCategories.getJobDepartmentAndTitles()
                 .entrySet()
                 .stream()
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList()));
 
 
-        var actual = mockMvc.perform(get(DEPARTMENT_NAME_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+        var actual = this.mockMvc.perform(get(DEPARTMENT_NAME_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expected))
                 .andReturn()
@@ -64,10 +69,10 @@ public class SalaryCalculatorControllerGetTest {
 
     @Test
     public void getJobTitlesIt() throws Exception {
-        String expected = objectMapper.writeValueAsString(List.of(jobCategories.getJobDepartmentAndTitles()
-                .get("it")
+        String expected = this.objectMapper.writeValueAsString(List.of(this.jobCategories.getJobDepartmentAndTitles()
+                .get(IT)
                 .split(",")));
-        var actual = mockMvc.perform(get(IT_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+        var actual = this.mockMvc.perform(get(IT_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expected))
                 .andReturn()
@@ -79,10 +84,10 @@ public class SalaryCalculatorControllerGetTest {
 
     @Test
     public void getJobTitlesFinance() throws Exception {
-        String expected = objectMapper.writeValueAsString(List.of(jobCategories.getJobDepartmentAndTitles()
-                .get("finance")
+        String expected = this.objectMapper.writeValueAsString(List.of(this.jobCategories.getJobDepartmentAndTitles()
+                .get(FINANCE)
                 .split(",")));
-        var actual = mockMvc.perform(get(FINANCE_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+        var actual = this.mockMvc.perform(get(FINANCE_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expected))
                 .andReturn()
@@ -94,10 +99,10 @@ public class SalaryCalculatorControllerGetTest {
 
     @Test
     public void getJobTitlesEngineer() throws Exception {
-        String expected = objectMapper.writeValueAsString(List.of(jobCategories.getJobDepartmentAndTitles()
-                .get("engineer")
+        String expected = this.objectMapper.writeValueAsString(List.of(this.jobCategories.getJobDepartmentAndTitles()
+                .get(ENGINEER)
                 .split(",")));
-        var actual = mockMvc.perform(get(ENGINEER_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+        var actual = this.mockMvc.perform(get(ENGINEER_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expected))
                 .andReturn()
@@ -109,10 +114,10 @@ public class SalaryCalculatorControllerGetTest {
 
     @Test
     public void getJobTitlesRestaurant() throws Exception {
-        String expected = objectMapper.writeValueAsString(List.of(jobCategories.getJobDepartmentAndTitles()
-                .get("restaurant")
+        String expected = this.objectMapper.writeValueAsString(List.of(this.jobCategories.getJobDepartmentAndTitles()
+                .get(RESTAURANT)
                 .split(",")));
-        var actual = mockMvc.perform(get(RESTAURANT_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+        var actual = this.mockMvc.perform(get(RESTAURANT_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expected))
                 .andReturn()
@@ -125,10 +130,10 @@ public class SalaryCalculatorControllerGetTest {
 
     @Test
     public void getJobTitlesAirline() throws Exception {
-        String expected = objectMapper.writeValueAsString(List.of(jobCategories.getJobDepartmentAndTitles()
-                .get("airline")
+        String expected = this.objectMapper.writeValueAsString(List.of(this.jobCategories.getJobDepartmentAndTitles()
+                .get(AIRLINE)
                 .split(",")));
-        var actual = mockMvc.perform(get(AIRLINE_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
+        var actual = this.mockMvc.perform(get(AIRLINE_JOB_TITLE_ENDPOINT).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expected))
                 .andReturn()
