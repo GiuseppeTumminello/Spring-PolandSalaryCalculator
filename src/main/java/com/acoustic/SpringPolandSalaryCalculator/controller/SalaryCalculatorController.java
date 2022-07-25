@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +42,7 @@ public class SalaryCalculatorController {
 
 
     @PostMapping("/calculate/{grossMonthlySalary}")
-    public Map<String, BigDecimal> getSalaryCalculation(@PathVariable BigDecimal grossMonthlySalary , @RequestParam(defaultValue = "0") String departmentName, @RequestParam(defaultValue = "0") int jobTitleId) {
+    public Map<String, BigDecimal> getSalaryCalculation(@PathVariable  BigDecimal grossMonthlySalary , @RequestParam(defaultValue = "0") String departmentName, @RequestParam(defaultValue = "0") int jobTitleId) {
          var response = this.salaryCalculatorService.stream()
                  .collect(Collectors.toMap(SalaryCalculatorService::getDescription, e -> e.apply(grossMonthlySalary)));
          if (this.jobCategories.getJobDepartmentAndTitles().containsKey(departmentName.toLowerCase())) {

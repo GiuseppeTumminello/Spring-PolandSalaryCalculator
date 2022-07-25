@@ -50,14 +50,16 @@
       <groupId>org.springframework.boot</groupId>
       <scope>test</scope>
     </dependency>
-
-    
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+
     </dependency>
-
-
+    <dependency>
+      <artifactId>h2</artifactId>
+      <groupId>com.h2database</groupId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <description>Poland salary calculator</description>
   <groupId>com.acoustic</groupId>
